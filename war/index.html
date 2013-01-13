@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html itemscope itemtype="http://schema.org/Map">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta itemprop="name" content="Little Red Plots">
+<meta itemprop="description"
+	content="A data visualization of land sales in Singapore">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- BEGIN Facebook Open Graph tags -->
+<meta property="og:title" content="Little Red Plots" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="http://littleredplots.appspot.com/" />
+<meta property="og:image" content="" />
+<meta property="og:site_name" content="Little Red Plots" />
+<meta property="fb:app_id" content="214822675309691" />
+<!-- END Facebook Open Graph tags -->
+
+
+<title>Little Red Plots</title>
+
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css"
+	type="text/css">
+<link rel="stylesheet" href="bootstrap/css/bootstrap-responsive.min.css"
+	type="text/css">
+<link rel="stylesheet" href="styles/plots.css" type="text/css">
+
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+<script type="text/javascript"
+	src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCIbRtyDo_GNHcCkGrSH-YZcfj68edf-xU&sensor=false"></script>
+
+<script type="text/javascript" src="timemap/mxn/mxn.js?(googlev3)"></script>
+<script type="text/javascript" src="timemap/timeline-2.3.0.js"></script>
+<script type="text/javascript" src="timemap/timemap_full.pack.js"></script>
+
+
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push([ '_setAccount', 'UA-37433928-1' ]);
+	_gaq.push([ '_trackPageview' ]);
+
+	(function() {
+		var ga = document.createElement('script');
+		ga.type = 'text/javascript';
+		ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl'
+				: 'http://www')
+				+ '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0];
+		s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</head>
+
+<body>
+	<!-- BEGIN Javascript SDK for Facebook Like Button HTML5 Plugin -->
+	<div id="fb-root"></div>
+	<script>
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id))
+				return;
+			js = d.createElement(s);
+			js.id = id;
+			js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	</script>
+	<!-- END Javascript SDK for Facebook Like Button HTML5 Plugin -->
+
+	<div class="container-fluid">
+
+		<div class="navbar">
+			<div class="navbar-inner">
+				<a class="brand" href="index.html">Little Red Plots</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li class="active"><a href="index.html">Land Sales</a></li>
+						<li><a
+							href="https://docs.google.com/spreadsheet/pub?key=0AkdFf0ojY-LPdGpWcE9kd1Fodk5LUFdJWlljOC1OV1E&output=html"
+							target="_blank">Data</a></li>
+						<li><a href="about.html">About</a></li>
+					</ul>
+					<div id="gplus-button" class="pull-right">
+						<!-- g-plusone button does not display properly if mixed with other css classes -->
+						<div class="g-plusone" data-size="medium"
+							data-href="http://littleredplots.appspot.com/"></div>
+					</div>
+					<div id="tweet-button" class="pull-right">
+						<a href="https://twitter.com/share" class="twitter-share-button"
+							data-url="http://littleredplots.appspot.com/"
+							data-text="Visualizing land sales with Little Red Plots! #Singapore">Tweet</a>
+					</div>
+					<div id="fb-like-button" class="pull-right">
+						<div class="fb-like"
+							data-href="http://littleredplots.appspot.com/" data-send="false"
+							data-layout="button_count" data-show-faces="false"></div>
+					</div>
+				</div>
+				<!--/.nav-collapse -->
+			</div>
+		</div>
+		<!-- END of top navbar -->
+		
+		<!-- BEGIN row of legend filter buttons -->
+		<div class="row-fluid">
+			<div class="span12">
+				<div id="tm-legend" class="btn-group"
+					data-toggle="buttons-checkbox">
+					
+					<button type="button" class="btn active btn-danger" id="filter-red"
+						value="red">Residential</button>
+					<button type="button" class="btn active btn-primary" id="filter-blue"
+						value="blue">Hotel</button>
+					<button type="button" class="btn active btn-green" id="filter-green"
+						value="green">Business</button>
+				</div>
+
+				<a id="hello-world" href="#" class="btn btn-info" rel="popover"><i
+					class="icon-info-sign icon-white"></i> What's This?</a> <a
+					id="timeline-zoom-tip" href="#" class="btn btn-info"
+					rel="popover"><i class="icon-search icon-white"></i> Timeline
+					Zoom</a>
+			</div>
+		</div>
+		<!-- BEGIN row of legend filter buttons -->
+
+		<div class="row-fluid">
+			<div class="span12">
+				<div id="timemap">
+					<div id="timelinecontainer">
+						<div id="timeline"></div>
+					</div>
+					<div id="mapcontainer">
+						<div id="map"></div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- end of layout container -->
+
+
+
+	<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/util.js"></script>
+	<script type="text/javascript" src="js/plots.js"></script>
+	
+	<script type="text/javascript">
+		// Tooltip options
+		(function pageUI() {
+			var options = {
+				title : "Zooming the Timeline",
+				placement : "bottom",
+				html : "false",
+				trigger : "hover",
+				content : "You can adjust the zoom level of the timeline by scrolling the mouse wheel. For example, the upper time band can zoom in to days and the lower time band can zoom out to years. Place the mouse pointer over the time band before scrolling the mouse wheel."
+			};
+			$("#timeline-zoom-tip").popover(options);
+			options.title = "Hi There!";
+			options.content = "This site shows government land sales in Singapore. Each bar on the timeline represents the tender duration of the land sale. Scroll the timeline by dragging or double-clicking on either time band. To see more information, click on the coloured bars on the timeline or the polygons on the map.";
+			$("#hello-world").popover(options);
+
+			// Tooltip options
+			options = {
+				title : "Hide/show sites for RESIDENTIAL",
+				placement : "bottom",
+				html : "false",
+				trigger : "hover"
+			};
+			$("#filter-red").tooltip(options);
+			options.title = "Hide/show sites for HOTEL";
+			$("#filter-blue").tooltip(options);
+			options.title = "Hide/show sites for BUSINESS 1 and 2";
+			$("#filter-green").tooltip(options);
+			
+		})();
+	</script>
+
+	<!-- BEGIN js for tweet button -->
+	<script>
+		!function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (!d.getElementById(id)) {
+				js = d.createElement(s);
+				js.id = id;
+				js.src = "//platform.twitter.com/widgets.js";
+				fjs.parentNode.insertBefore(js, fjs);
+			}
+		}(document, "script", "twitter-wjs");
+	</script>
+	<!-- END js for tweet button -->
+	<!-- BEGIN js for google +1 button -->
+	<script type="text/javascript">
+		(function() {
+			var po = document.createElement('script');
+			po.type = 'text/javascript';
+			po.async = true;
+			po.src = 'https://apis.google.com/js/plusone.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(po, s);
+		})();
+	</script>
+	<!-- END js for google +1 button -->
+
+</body>
+</html>
